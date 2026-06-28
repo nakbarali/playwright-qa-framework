@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/pageFixtures';
-import { users } from '../../utils/testData';
+import { users, invalidLoginCases } from '../../utils/testData';
 
 test.describe('Login', () => {
   test('successful login with standard user @smoke', async ({ loginPage, page }) => {
@@ -8,9 +8,12 @@ test.describe('Login', () => {
     await expect(page).toHaveURL(/inventory.html/);
   });
 
-  test('shows error for locked out user @negative', async ({ loginPage }) => {
-    await loginPage.open();
-    await loginPage.login(users.locked.username, users.locked.password);
-    await loginPage.expectErrorMessage('locked out');
-  });
+  // Data-driven: one test definition runs once for each case in invalidLoginCases
+  for (const { username, password, expectedError } of invalidLoginCases) {
+    test(`shows error for invalid login: "${username}" @negative`, async ({ loginPage }) => {
+      await loginPage.open();
+      await loginPage.login(username, password);
+      await loginPage.expectErrorMessage(expectedError);
+    });
+  }
 });
