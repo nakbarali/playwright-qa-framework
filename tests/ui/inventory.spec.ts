@@ -11,8 +11,7 @@ test.describe('Inventory', () => {
     await loginPage.login(users.standard.username, users.standard.password);
   });
 
-  test('sorts products by price low to high', async ({ page }) => {
-    const inventoryPage = new InventoryPage(page);
+test('sorts products by price low to high @regression', async ({ page }) => {    const inventoryPage = new InventoryPage(page);
     await inventoryPage.sortBy('lohi');
 
     const prices = await inventoryPage.getItemPrices();
@@ -20,7 +19,7 @@ test.describe('Inventory', () => {
     expect(prices).toEqual(sorted);
   });
 
-  test('adds item to cart and updates badge count', async ({ page }) => {
+test('adds item to cart and updates badge count @smoke', async ({ page }) => {
     const inventoryPage = new InventoryPage(page);
     await inventoryPage.addItemToCartByName('Sauce Labs Backpack');
     await expect(inventoryPage.cartBadge).toHaveText('1');
